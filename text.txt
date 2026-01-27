@@ -1,0 +1,6 @@
+var x;
+var x = 11;
+var y = 12;
+var zas;
+zas =x + y;
+print zas;

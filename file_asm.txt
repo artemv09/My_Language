@@ -1,0 +1,16 @@
+MOV x
+MOV x
+PUSH 11
+POPV x
+MOV y
+PUSH 12
+POPV y
+MOV zas
+PUSHV zas
+PUSHV x
+PUSHV y
+ADD
+POPV zas
+PUSHV zas
+OUT
+HLT
