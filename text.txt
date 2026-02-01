@@ -1,6 +1,17 @@
-var x;
-var x = 11;
-var y = 12;
-var zas;
-zas =x + y;
-print zas;
+fun ss()
+{
+    return 1234;
+    print 23;
+}
+
+fun main(y)
+{
+    y = y + 10000;
+
+
+    return y;
+}
+
+
+print call main(229);
+print call main(229);
