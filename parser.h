@@ -19,6 +19,12 @@ Ast* parser_eof(Parser* parser);
 
 Ast* parser_opend(Parser* parser);
 
+Ast* parser_fun_def(Parser* parser);
+
+Ast* parser_fun_call(Parser* parser);
+
+Ast* parser_return(Parser* parser);
+
 Ast* parser_while(Parser* parser);
 
 Ast* parser_if(Parser* parser);

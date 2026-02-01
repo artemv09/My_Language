@@ -22,9 +22,6 @@ typedef enum
     VARIBLE,
     CONS,
 
-    FUNC_DEFINITION,
-    FUNC_CALL,
-
     EQUAL,
 
     BINARY_OPTION,
@@ -33,7 +30,11 @@ typedef enum
 
     NODE_WHILE,
     NODE_IF,
-    PRINT
+    PRINT,
+
+    FUNC_CALL,
+    FUNC_DEF,
+    RETURN
 
 } PARSER_TYPE;
 
@@ -69,9 +70,12 @@ typedef struct Ast
         LOGIC type_node_log;
     };
 
-    struct Ast* else_body;
+    struct Ast* else_body;   
 
-    union
+    char** name_arg;
+
+    int count_arg = 0;
+    union //это все дерьмо убрать!!!
     {
         char* string;
         
@@ -90,6 +94,8 @@ typedef struct Ast
         char* end_op_name;
 
         char* end_prog_name;
+
+        char* fun_name;
     };
     
 } Ast;

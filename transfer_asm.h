@@ -10,6 +10,14 @@
 #include <ctype.h>
 
 extern int global_count;
+extern int global_count_arr_func;
+
+typedef struct 
+{
+    int flag_call;
+    char* name_func;
+} Func_help;
+
 
 typedef struct 
 {
@@ -17,10 +25,12 @@ typedef struct
 
 } Flag;
 
+int definition_for_call(char* name_func, Func_help* arr);
+
 int trans_asm(Ast* root);
 
-int run_tree(Ast* root, FILE* file, int count);
+int run_tree(Ast* root, FILE* file, int count, Func_help* arr);
 
-int transfer_rules(Ast* root, FILE* file, int count);
+int transfer_rules(Ast* root, FILE* file, int count, Func_help* arr);
 
 #endif

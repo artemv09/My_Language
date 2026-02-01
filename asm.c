@@ -117,7 +117,7 @@ Element_arr_asm* creat_bin_file(Element_arr_asm* arr_func_asm, Stack* stack_stru
             stack_struct -> list_values_var = (Variable_def*)realloc(stack_struct -> list_values_var, (stack_struct -> count_var + 1) * sizeof(Variable_def));
         }
 
-        else if(arr_func_asm[count].type != ADD_asm && arr_func_asm [count].type != SUB_asm && arr_func_asm[count].type != MUL_asm && arr_func_asm[count].type != DIV_asm && arr_func_asm[count].type != OUT)
+        else if(arr_func_asm[count].type != ADD_asm && arr_func_asm [count].type != SUB_asm && arr_func_asm[count].type != MUL_asm && arr_func_asm[count].type != DIV_asm && arr_func_asm[count].type != OUT && arr_func_asm[count].type != RET)
         {
             int numb = 0;
 

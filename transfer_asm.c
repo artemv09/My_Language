@@ -7,22 +7,39 @@
 #include <string.h>
 #include <ctype.h>
 
-int global_count;
+int global_count = 0;
+int global_count_arr_func = 0;
 
 int trans_asm(Ast* root)
 {
     FILE* file = fopen("file_asm.txt", "w");
 
     int count = 0;
+
+    Func_help* arr = (Func_help*)calloc(100, sizeof(Func_help));
     
-    run_tree(root, file, count);
+    run_tree(root, file, count, arr);
+
+    free(arr);
 
     fclose(file);
 
     return 0;
 }
 
-int run_tree(Ast* root, FILE* file, int count)
+int definition_for_call(char* name_func, Func_help* arr)
+{
+    int count = 0;
+
+    while(strcmp(name_func, arr[count].name_func) != 0)
+    {
+        count++;
+    }
+
+    return arr[count].flag_call;
+}
+
+int run_tree(Ast* root, FILE* file, int count, Func_help* arr)
 {
     if(root -> left != NULL)
     {
@@ -37,29 +54,51 @@ int run_tree(Ast* root, FILE* file, int count)
             count = global_count * 4;
             global_count++;
         }
+        if(root -> type == FUNC_DEF)
+        {
+            count = global_count * 4;
+            global_count++;
 
-        run_tree(root -> left, file, count);
+            //arr = (Func_help*)realloc(arr, (global_count_arr_func + 1) * sizeof(Func_help));
+
+            fprintf(file, "JMP %d\n", count);
+
+            fprintf(file, ": %d\n", count + 1);
+
+            arr[global_count_arr_func].name_func = strdup(root -> var);
+            arr[global_count_arr_func].flag_call = count + 1;
+
+            global_count_arr_func++;
+
+            for(int i = 0; i < root -> count_arg; i++)
+            {
+                fprintf(file, "MOV %s\n", root -> name_arg[i]);
+                fprintf(file, "POPV %s\n", root -> name_arg[i]);
+            }
+        }
+
+        run_tree(root -> left, file, count, arr);
     }
     if(root -> right != NULL)
     {
-        run_tree(root -> right, file, count);
+        run_tree(root -> right, file, count, arr);
     }
     if(root -> else_body != NULL && root -> type == NODE_IF)
     {
         fprintf(file, "JMP %d\n", count + 3);
         fprintf(file, ": %d\n", count + 2);
 
-        run_tree(root -> else_body, file, count);
+        run_tree(root -> else_body, file, count, arr);
 
         fprintf(file, ": %d\n", count + 3);
     }
 
-    transfer_rules(root, file, count);
+    transfer_rules(root, file, count, arr);
 
     return 0;
 }
 
-int transfer_rules(Ast* root, FILE* file, int count)
+int transfer_rules(Ast* root, FILE* file, int count, Func_help* arr)
 {
     switch(root -> type)
     {
@@ -164,6 +203,28 @@ int transfer_rules(Ast* root, FILE* file, int count)
         }
         case NODE_IF:
         {
+            break;
+        }
+        case FUNC_DEF:
+        {
+            fprintf(file, ": %d\n", count);// TODO переделать
+
+            break;
+        }
+        case FUNC_CALL:
+        {
+            for(int i = 0; i < root -> count_arg; i++)
+            {
+                fprintf(file, "PUSH %s\n", root -> name_arg[root -> count_arg - i - 1]); // хз пробная хрень
+            }
+
+            fprintf(file, "CALL %d\n", definition_for_call(root -> var, arr));
+        
+            break;
+        }
+        case RETURN:
+        {
+            fprintf(file, "RET\n");
             break;
         }
         default:

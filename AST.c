@@ -67,6 +67,21 @@ Ast* creat_node(Ast* ast_tree1, Ast* ast_tree2, PARSER_TYPE type, char* str)
             ast_node -> var = str;
             break;
         }
+        case FUNC_CALL:
+        {
+            ast_node -> var = str;
+            break;
+        }
+        case FUNC_DEF:
+        {
+            ast_node -> var = str;
+            break;
+        }
+        case RETURN:
+        {
+            ast_node -> var = str;
+            break;
+        }
 
         default:
             printf("ошибка такого типа не было заявлено: %d\n", type);

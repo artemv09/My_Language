@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "lexer.h"
 #include "token.h"
@@ -11,15 +13,19 @@
 #include "graphviz.h"
 #include "transfer_asm.h"
 #include "asm.h"
-#include "function.h"
+#include "function_asm.h"
 
 int main()
 {
     char* arr = read_file_without_newlines();
 
+    time_t start = time(NULL);
+
     printf("Начало парсинга строки: %s\n", arr);
 
     Lexer* lexer = lexer_creat(arr);
+
+    
 
     if(!lexer) 
     {
@@ -51,6 +57,9 @@ int main()
     free_parser(parser);
     free_lexer(lexer);
 
+    time_t end = time(NULL);
+
+    printf("Прошло %ld секунд\n", (end - start));
     printf("конец\n");
 
     return 0;

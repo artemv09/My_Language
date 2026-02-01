@@ -42,7 +42,7 @@ Ast* parser_eof(Parser* parser)
 
 Ast* parser_opend(Parser* parser)
 {
-    Ast* ast_tree = parser_while(parser);
+    Ast* ast_tree = parser_fun_def(parser);
     
     char* str = strdup("END_OP");
     
@@ -71,6 +71,152 @@ Ast* parser_opend(Parser* parser)
     Ast* ast_tree1 = parser_opend(parser);
 
     return creat_node(ast_tree, ast_tree1, END_OP, str);
+}
+
+Ast* parser_fun_def(Parser* parser)
+{
+    // хз наверное правильно написал
+    if(strcmp(parser -> token_now -> value, "fun") == 0)
+    {
+        new_parser(parser);
+
+        char* str = strdup(parser -> token_now -> value); // получили название функции
+
+        new_parser(parser);
+
+        if(parser -> token_now -> type != TOKEN_LBRACE) 
+        {
+            printf("Ожидалось '(' после названия функции\n");
+            free(str);
+
+            return NULL;
+        }
+
+        new_parser(parser); // дай бог работает
+
+        char** name_arg = (char**)calloc(1, sizeof(char*));
+        int count_arg = 0;
+
+        if(parser -> token_now -> type == TOKEN_RBRACE)
+        {
+            new_parser(parser);
+        }
+        else
+        {
+            while(parser -> token_now -> type != TOKEN_LPAREN)
+            {
+                name_arg[count_arg] = (char*)calloc(10, sizeof(char));
+
+                name_arg[count_arg] = strdup(parser -> token_now -> value);
+
+                count_arg++;
+
+                new_parser(parser);
+                new_parser(parser);
+
+                //printf("[%d]\n", count_arg);
+            }
+        }
+        // создать узел def fun и создать для него левый подузел с кодом
+
+        new_parser(parser);
+
+        Ast* left = parser_opend(parser);
+
+        Ast* rezult = creat_node(left, NULL, FUNC_DEF, str);
+
+        rezult -> name_arg = name_arg;
+        rezult -> count_arg = count_arg;
+
+        return rezult;
+    }
+    else
+    {
+        return parser_fun_call(parser);
+    }
+}
+
+Ast* parser_fun_call(Parser* parser)
+{
+    // подумать на ;
+    if(strcmp(parser -> token_now -> value, "call") == 0)
+    {
+        new_parser(parser);
+
+        char* str = strdup(parser -> token_now -> value); // получили название функции
+
+        new_parser(parser);
+
+        if(parser -> token_now -> type != TOKEN_LBRACE) 
+        {
+            printf("Ожидалось '(' после названия функции\n");
+            free(str);
+
+            return NULL;
+        }
+
+        new_parser(parser); // дай бог работает
+
+        char** name_arg = (char**)calloc(1, sizeof(char*));
+        int count_arg = 0;
+
+        if(parser -> token_now -> type == TOKEN_RBRACE)
+        {
+            new_parser(parser);
+            //new_parser(parser);
+        }
+        else
+        {
+            while(parser -> token_now -> type != TOKEN_SEMICOLON)
+            {
+                name_arg[count_arg] = (char*)calloc(10, sizeof(char));
+
+                name_arg[count_arg] = strdup(parser -> token_now -> value);
+
+                count_arg++;
+
+                printf("[%d]\n", count_arg);
+
+                new_parser(parser);
+                new_parser(parser);
+            }
+        }
+        // создать узел def fun и создать для него левый подузел с кодом
+
+        //new_parser(parser);
+
+        Ast* rezult = creat_node(NULL, NULL, FUNC_CALL, str);
+
+        rezult -> name_arg = name_arg;
+        rezult -> count_arg = count_arg;
+
+        return rezult;
+    }
+    else
+    {
+        return parser_return(parser);
+    }
+}
+
+Ast* parser_return(Parser* parser)
+{
+    if(strcmp(parser -> token_now -> value, "return") == 0)
+    {
+        char* str = strdup(parser -> token_now -> value); 
+
+        new_parser(parser);
+
+        Ast* left = parser_equal(parser);
+
+        Ast* rezult = creat_node(left, NULL, RETURN, str);
+
+        return rezult;
+    }
+    else
+    {
+        return parser_while(parser);
+    }
+
 }
 
 Ast* parser_while(Parser* parser)
@@ -353,7 +499,7 @@ Ast* parser_equal(Parser* parser)
 
         new_parser(parser);
 
-        Ast* ast_tree2 = parser_bin(parser);
+        Ast* ast_tree2 = parser_fun_call(parser);
 
         if (!ast_tree2) 
         {
@@ -379,7 +525,7 @@ Ast* parser_print(Parser* parser)
 
         new_parser(parser);
 
-        Ast* ast_tree = parser_var(parser);
+        Ast* ast_tree = parser_fun_call(parser);
 
         return creat_node(ast_tree, NULL, PRINT, str);
     }

@@ -50,12 +50,14 @@ typedef struct
 
 typedef struct 
 {
-    int top = 0;
+    int top = 0; // передвигаем по массиву исполняемых функций
     int top_stack = 0;
 
     int count_var = 0;
 
     int* stack;
+
+    int transition_ret = 0;
     
     int mark[MAXSIZE];
 

@@ -82,6 +82,21 @@ int made_graphviz_dot(Ast* root, FILE* file)
     {
         fprintf(file, "                <td colspan=\"2\" align=\"center\">%s</td>", root -> assignment_name);
     }
+
+    else if(root -> type == FUNC_CALL)
+    { 
+        fprintf(file, "                <td colspan=\"2\" align=\"center\">%s</td>", root -> var);
+    }
+
+    else if(root -> type == FUNC_DEF)
+    { 
+        fprintf(file, "                <td colspan=\"2\" align=\"center\">%s</td>", root -> var);
+    }
+
+    else if(root -> type == RETURN)
+    { 
+        fprintf(file, "                <td colspan=\"2\" align=\"center\">%s</td>", root -> var);
+    }
     
     else if(root -> type == BINARY_OPTION)
     {
