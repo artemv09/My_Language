@@ -207,8 +207,8 @@ int transfer_rules(Ast* root, FILE* file, int count, Func_help* arr)
         }
         case FUNC_DEF:
         {
-            fprintf(file, ": %d\n", count);// TODO переделать
-
+            fprintf(file, ": %d\n", count);
+            
             break;
         }
         case FUNC_CALL:
