@@ -1,17 +1,24 @@
-fun ss()
+fun main(x)
 {
-    return 1234;
-    print 23;
+    while(x less 12)
+    {
+        x = x + 2;
+    }
+
+    if(x more 0)
+    {
+        print 228;
+        print 1234;
+    }
+    
+    else
+    {
+        print 23;
+    }
+
+    print x;
+
+    return x;
 }
 
-fun main(y)
-{
-    y = y + 10000;
-
-
-    return y;
-}
-
-
-print call main(229);
-print call main(229);
+call main(11);
