@@ -1492,17 +1492,7 @@ void compile_to_c(Ast* root)
 void interprit(Ast* root, FILE* file)
 {
 }
-
-
-
-
-
-
-
-
-
-
-
+1
 char* read_file_without_newlines()
 {
     FILE* file = fopen("text.txt", "r");
