@@ -1,4 +1,4 @@
-fun main(x)
+fun main(x, y, z)
 {
     while(x less 12)
     {
@@ -21,4 +21,4 @@ fun main(x)
     return x;
 }
 
-call main(11);
+call main(11, 12, 13);

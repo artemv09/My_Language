@@ -2,6 +2,10 @@ JMP 0
 : 1
 MOV x
 POPV x
+MOV y
+POPV y
+MOV z
+POPV z
 : 4
 PUSHV x
 PUSH 12
@@ -34,6 +38,8 @@ OUT
 PUSHV x
 RET
 : 0
+PUSH 13
+PUSH 12
 PUSH 11
 CALL 1
 HLT
